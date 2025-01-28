@@ -8,11 +8,11 @@ public class BallDog : MonoBehaviour
 {
     public AudioSource nom;
     public AudioSource bark;
-    public int treatCounter;
+    public int treatCounter; //counts treats eaten
     public Sprite standSprite;
     Treat treat;
-    Vector2 flip = new Vector2(-1, 1);
-    float speed = 0f;
+    Vector2 flip = new Vector2(-1, 1); //vector to flip the sprite
+    float speed = 0f; //speed value starts at 0
     float xPos2;
     // Start is called before the first frame update
     void Start()
@@ -26,13 +26,13 @@ public class BallDog : MonoBehaviour
     {
 
         if (treat.isPlaced)
-        {
-            GetComponent<Animator>().enabled = true;
-            float xPos1 = transform.position.x;
-            xPos2 = treat.xPos;
-            if (xPos1 > xPos2)
+        {   
+            GetComponent<Animator>().enabled = true; //plays running animation when treat is placed
+            float xPos1 = transform.position.x; //dog position
+            xPos2 = treat.xPos; //treat position
+            if (xPos1 > xPos2) //determines distance to know which way dog should face and move 
             {
-                speed = -0.005f * (treatCounter+1);
+                speed = -0.005f * (treatCounter+1); //the more treats eaten, the faster he will move
                 if (transform.localScale.x == 1)
                 {
                     transform.localScale *= flip;
@@ -46,15 +46,16 @@ public class BallDog : MonoBehaviour
                     transform.localScale *= flip;
                 }
             }
-            if ((xPos2 - xPos1 <= 0.2) && (xPos2 - xPos1 >= -0.2))
+            if ((xPos2 - xPos1 <= 0.2) && (xPos2 - xPos1 >= -0.2)) //when dog gets close enough, he will eat the treat
             {
                 treat.isPlaced = false;
-                GetComponent<Animator>().enabled = false;
+                GetComponent<Animator>().enabled = false; //dog stops running and stands still
                 GetComponent<SpriteRenderer>().sprite = standSprite;
-                treatCounter++;
-                nom.Play(0);
+                treatCounter++; //treat counter goes up
+                nom.Play(0); //plays eating sound
             }
 
+            //moves the dog accordingly (if the treat is placed)
             Vector3 pos = new Vector3(transform.position.x, transform.position.y, -1);
             pos.x += speed;
 
@@ -68,7 +69,7 @@ public class BallDog : MonoBehaviour
             transform.position = pos;
             
         }
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1)) //when right mouse is clicked, plays a bark sound
         {
             bark.Play(0);
         }
